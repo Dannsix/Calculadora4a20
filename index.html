@@ -1,36 +1,36 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-    <title>Calculadora Ma</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora MA Inteligente</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <button id="toggle-mode">🌙</button>
-    <div style="padding: 10px;"> 
-        <br>
-        <label for="valorMedido">Valor Medido:</label>
-        <br>    
-        <input type="number" id="valorMedido" style="width: 100%; box-sizing: border-box;">
-        <br>
-        <label for="fundoEscala">Fundo de Escala:</label>
-        <br>
-        <input type="number" id="fundoEscala" style="width: 100%; box-sizing: border-box;">
-        <br>
-        <button onclick="calcular()" style="width: 100%; margin-top: 10px;">Calcular</button>
-        <button onclick="limpar()" style="width: 100%; margin-top: 10px;">Limpar</button>
-        <br>
-        <label for="resultado">Resultado:</label>
-        <p id="resultado">0</p>
-        <script src="script.js"></script>
-    </div>
-    
-    <div id="popup" class="popup">
-        <div class="popup-content">
-            <span class="close-button" onclick="closePopup()">&times;</span>
-            <p>Resultado:</p>
-            <p id="resultado-popup"></p>
+    <div class="container">
+        <button id="toggle-mode">🌙</button>
+        
+        <div class="input-group">
+            <label for="valorMedido">Valor Medido:</label>
+            <input type="number" id="valorMedido" placeholder="Digite o valor medido">
+        </div>
+
+        <div class="input-group">
+            <label for="fundoEscala">Fundo de Escala:</label>
+            <input type="number" id="fundoEscala" placeholder="Digite o fundo de escala">
+        </div>
+
+        <div class="button-group">
+            <button onclick="calcular()">Calcular</button>
+            <button onclick="limpar()">Limpar</button>
+        </div>
+
+        <div class="resultado">
+            <span>Resultado:</span>
+            <p id="resultado">0</p>
         </div>
     </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
