@@ -1,107 +1,75 @@
-function showPopup() {
-  document.getElementById("popup").style.display = "block";
-}
-
-function closePopup() {
-  document.getElementById("popup").style.display = "none";
-}
-
+// Controle de Tema
 const toggleButton = document.getElementById('toggle-mode');
 const body = document.body;
 
-toggleButton.textContent = '🌙'; // Texto inicial
-
 toggleButton.addEventListener('click', () => {
-  body.classList.toggle('dark-mode');
-
-  if (body.classList.contains('dark-mode')) {
-    toggleButton.textContent = '☀️';
-  } else {
-    toggleButton.textContent = '🌙';
-  }
+    body.classList.toggle('dark-mode');
+    toggleButton.textContent = body.classList.contains('dark-mode') ? '☀️' : '🌙';
+    localStorage.setItem('darkMode', body.classList.contains('dark-mode'));
 });
 
-
-
-function calcular() {
-  const valorMedido = document.getElementById('valorMedido').value;
-  const fundoEscala = document.getElementById('fundoEscala').value;
-
-  // Verifica se algum dos campos está vazio
-  if (!valorMedido) {
-    alert("Por favor, preencha o campo 'Valor Medido'.");
-    return;
-  } else if (!fundoEscala) {
-    alert("Por favor, preencha o campo 'Fundo de Escala'.");
-    return;
-  }
-
-  // Se ambos os campos estiverem preenchidos, realiza o cálculo
-  let resultado = ((parseFloat(valorMedido) - 4) * parseFloat(fundoEscala)) / 16;
-  resultado = resultado.toFixed(2);
-  document.getElementById('resultado').textContent = `${resultado}`;
-  //alert("O resultado é: " + resultado);
-  document.getElementById("resultado-popup").textContent = resultado;
-  showPopup();
-  
+// Verificar preferência salva
+if (localStorage.getItem('darkMode') === 'true') {
+    body.classList.add('dark-mode');
+    toggleButton.textContent = '☀️';
 }
 
-// Função de limpar permanece a mesma
+// Funções da Calculadora
+function calcular() {
+    const valorMedido = document.getElementById('valorMedido').value;
+    const fundoEscala = document.getElementById('fundoEscala').value;
+
+    if (!valorMedido || !fundoEscala) {
+        showAlert('Por favor, preencha ambos os campos!');
+        return;
+    }
+
+    const resultado = ((parseFloat(valorMedido) - 4) * parseFloat(fundoEscala)) / 16;
+    document.getElementById('resultado').textContent = resultado.toFixed(2);
+}
 
 function limpar() {
-  document.getElementById('valorMedido').value = "";
-  document.getElementById('fundoEscala').value = "";
-  document.getElementById('resultado').textContent = "0";
+    document.getElementById('valorMedido').value = '';
+    document.getElementById('fundoEscala').value = '';
+    document.getElementById('resultado').textContent = '0';
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    const valorMedidoInput = document.getElementById('valorMedido');
-    const fundoEscalaInput = document.getElementById('fundoEscala');
-    const resultadoElement = document.getElementById('resultado');
-    const resultadoPopupElement = document.getElementById('resultado-popup');
-    const popup = document.getElementById('popup');
-    const toggleModeButton = document.getElementById('toggle-mode');
-    let isDarkMode = false;
+// Sistema de Alertas
+function showAlert(message) {
+    const alertElement = document.createElement('div');
+    alertElement.style.position = 'fixed';
+    alertElement.style.bottom = '20px';
+    alertElement.style.left = '50%';
+    alertElement.style.transform = 'translateX(-50%)';
+    alertElement.style.padding = '15px 25px';
+    alertElement.style.background = body.classList.contains('dark-mode') ? '#444' : '#fff';
+    alertElement.style.color = body.classList.contains('dark-mode') ? '#fff' : '#333';
+    alertElement.style.borderRadius = '8px';
+    alertElement.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+    alertElement.style.zIndex = '1000';
+    alertElement.textContent = message;
 
-    function calcular() {
-        const valorMedido = parseFloat(valorMedidoInput.value);
-        const fundoEscala = parseFloat(fundoEscalaInput.value);
+    document.body.appendChild(alertElement);
+    setTimeout(() => alertElement.remove(), 3000);
+}
 
-        if (isNaN(valorMedido) || isNaN(fundoEscala)) {
-            resultadoElement.textContent = "Insira valores válidos.";
-            return;
-        }
+// Detecção de Dispositivo Inteligente
+function handleDeviceAdaptation() {
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+    const inputs = document.querySelectorAll('input[type="number"]');
+    
+    inputs.forEach(input => {
+        input.addEventListener('focus', () => {
+            if (isMobile && window.innerWidth < 768) {
+                window.scrollTo(0, input.offsetTop - 100);
+            }
+        });
+    });
+}
 
-        const resultado = (valorMedido / fundoEscala) * 100;
-        resultadoElement.textContent = resultado.toFixed(2) + "%";
-        resultadoPopupElement.textContent = resultado.toFixed(2) + "%";
-        popup.style.display = 'block';
-    }
-
-    function limpar() {
-        valorMedidoInput.value = '';
-        fundoEscalaInput.value = '';
-        resultadoElement.textContent = '0';
-    }
-
-    function closePopup() {
-        popup.style.display = 'none';
-    }
-
-    function toggleDarkMode() {
-        isDarkMode = !isDarkMode;
-        if (isDarkMode) {
-            document.body.classList.add('dark-mode');
-            toggleModeButton.textContent = '☀️';
-        } else {
-            document.body.classList.remove('dark-mode');
-            toggleModeButton.textContent = '🌙';
-        }
-    }
-
-    toggleModeButton.addEventListener('click', toggleDarkMode);
-
-    window.calcular = calcular;
-    window.limpar = limpar;
-    window.closePopup = closePopup;
+// Inicialização
+window.addEventListener('DOMContentLoaded', () => {
+    handleDeviceAdaptation();
 });
+
+// Redimensionamento
