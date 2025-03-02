@@ -2,70 +2,102 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Calculadora MA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora MA Inteligente</title>
     <style>
-        /* Estilos Gerais */
+        /* Estilos Base */
+        :root {
+            --bg-color: #FAF0E6;
+            --text-color: #333;
+            --input-bg: #FFFFFF;
+            --button-bg: #B0C4DE;
+            --border-color: #007bff;
+        }
+
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 0;
             padding: 20px;
-            background-color: #FAF0E6;
-            color: #333;
-            transition: background-color 0.3s, color 0.3s;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
         }
 
         .container {
             max-width: 600px;
             margin: 0 auto;
             position: relative;
-            padding-top: 60px;
+            padding-top: 70px;
         }
 
         /* Grupo de Inputs */
         .input-group {
-            margin: 20px 0;
-            position: relative;
+            margin: 25px 0;
         }
 
-        /* Estilos do Toggle Button */
+        /* Botão de Tema */
         #toggle-mode {
             position: fixed;
             top: 20px;
             right: 20px;
-            width: 60px;
-            height: 60px;
-            font-size: 1.5em;
+            width: 50px;
+            height: 50px;
+            font-size: 1.3em;
             border-radius: 50%;
             border: none;
             cursor: pointer;
-            background-color: #B0C4DE;
-            z-index: 1;
+            background-color: var(--button-bg);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* Inputs */
+        /* Campos de Entrada */
         input[type="number"] {
-            text-align: center;
-            width: 80%;
-            height: 40px;
-            font-size: 1.2em;
-            margin: 10px 0;
-            padding: 15px;
-            border: 2px solid #007bff;
-            border-radius: 10px;
-            box-sizing: border-box;
+            width: 100%;
+            max-width: 300px;
+            height: 45px;
+            font-size: 1.1em;
+            margin: 10px auto;
+            padding: 10px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            display: block;
         }
 
         /* Botões Principais */
-        button:not(#toggle-mode) {
-            width: 200px;
+        .button-group button {
+            width: 100%;
+            max-width: 200px;
             height: 50px;
-            font-size: 1.1em;
-            margin: 10px;
+            font-size: 1em;
+            margin: 15px auto;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            background-color: #B0C4DE;
+            background-color: var(--button-bg);
+            color: var(--text-color);
+            transition: transform 0.2s;
+        }
+
+        /* Resultado */
+        .resultado {
+            margin: 30px 0;
+            font-size: 1.4em;
+            font-weight: bold;
+        }
+
+        /* Modo Escuro */
+        .dark-mode {
+            --bg-color: #222;
+            --text-color: #fff;
+            --input-bg: #333;
+            --button-bg: #555;
+            --border-color: #666;
         }
 
         /* Layout Responsivo */
@@ -75,32 +107,36 @@
             }
 
             input[type="number"] {
-                width: 60%;
-                font-size: 1.4em;
-            }
-
-            button:not(#toggle-mode) {
-                width: 250px;
+                max-width: 400px;
                 font-size: 1.2em;
             }
+
+            .button-group button {
+                max-width: 250px;
+                font-size: 1.1em;
+            }
         }
 
-        /* Modo Escuro */
-        .dark-mode {
-            background-color: #222;
-            color: #fff;
-        }
+        @media (max-width: 480px) {
+            .container {
+                padding-top: 60px;
+            }
 
-        .dark-mode input[type="number"] {
-            background-color: #333;
-            color: #fff;
-            border-color: #555;
-        }
+            #toggle-mode {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2em;
+            }
 
-        /* Resultado */
-        .resultado {
-            margin-top: 20px;
-            font-size: 1.4em;
+            input[type="number"] {
+                width: 90%;
+                font-size: 1em;
+            }
+
+            .button-group button {
+                width: 90%;
+                height: 45px;
+            }
         }
     </style>
 </head>
@@ -109,13 +145,13 @@
         <button id="toggle-mode">🌙</button>
         
         <div class="input-group">
-            <label for="valorMedido">Valor Medido:</label><br>
-            <input type="number" id="valorMedido">
+            <label for="valorMedido">Valor Medido:</label>
+            <input type="number" id="valorMedido" placeholder="Digite o valor medido">
         </div>
 
         <div class="input-group">
-            <label for="fundoEscala">Fundo de Escala:</label><br>
-            <input type="number" id="fundoEscala">
+            <label for="fundoEscala">Fundo de Escala:</label>
+            <input type="number" id="fundoEscala" placeholder="Digite o fundo de escala">
         </div>
 
         <div class="button-group">
@@ -124,20 +160,27 @@
         </div>
 
         <div class="resultado">
-            <label>Resultado:</label>
+            <span>Resultado:</span>
             <p id="resultado">0</p>
         </div>
     </div>
 
     <script>
-        // Funções do Tema
+        // Controle de Tema
         const toggleButton = document.getElementById('toggle-mode');
         const body = document.body;
 
         toggleButton.addEventListener('click', () => {
             body.classList.toggle('dark-mode');
             toggleButton.textContent = body.classList.contains('dark-mode') ? '☀️' : '🌙';
+            localStorage.setItem('darkMode', body.classList.contains('dark-mode'));
         });
+
+        // Verificar preferência salva
+        if (localStorage.getItem('darkMode') === 'true') {
+            body.classList.add('dark-mode');
+            toggleButton.textContent = '☀️';
+        }
 
         // Funções da Calculadora
         function calcular() {
@@ -145,11 +188,11 @@
             const fundoEscala = document.getElementById('fundoEscala').value;
 
             if (!valorMedido || !fundoEscala) {
-                alert('Preencha ambos os campos!');
+                showAlert('Por favor, preencha ambos os campos!');
                 return;
             }
 
-            const resultado = (parseFloat(valorMedido) - 4) * parseFloat(fundoEscala) / 16;
+            const resultado = ((parseFloat(valorMedido) - 4) * parseFloat(fundoEscala)) / 16;
             document.getElementById('resultado').textContent = resultado.toFixed(2);
         }
 
@@ -158,6 +201,49 @@
             document.getElementById('fundoEscala').value = '';
             document.getElementById('resultado').textContent = '0';
         }
+
+        // Sistema de Alertas
+        function showAlert(message) {
+            const alertElement = document.createElement('div');
+            alertElement.style.position = 'fixed';
+            alertElement.style.bottom = '20px';
+            alertElement.style.left = '50%';
+            alertElement.style.transform = 'translateX(-50%)';
+            alertElement.style.padding = '15px 25px';
+            alertElement.style.background = body.classList.contains('dark-mode') ? '#444' : '#fff';
+            alertElement.style.color = body.classList.contains('dark-mode') ? '#fff' : '#333';
+            alertElement.style.borderRadius = '8px';
+            alertElement.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+            alertElement.style.zIndex = '1000';
+            alertElement.textContent = message;
+
+            document.body.appendChild(alertElement);
+            setTimeout(() => alertElement.remove(), 3000);
+        }
+
+        // Detecção de Dispositivo Inteligente
+        function handleDeviceAdaptation() {
+            const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+            const inputs = document.querySelectorAll('input[type="number"]');
+            
+            inputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    if (isMobile && window.innerWidth < 768) {
+                        window.scrollTo(0, input.offsetTop - 100);
+                    }
+                });
+            });
+        }
+
+        // Inicialização
+        window.addEventListener('DOMContentLoaded', () => {
+            handleDeviceAdaptation();
+        });
+
+        // Redimensionamento da Janela
+        window.addEventListener('resize', () => {
+            handleDeviceAdaptation();
+        });
     </script>
 </body>
 </html>
