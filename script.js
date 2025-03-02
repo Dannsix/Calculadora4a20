@@ -53,3 +53,55 @@ function limpar() {
   document.getElementById('fundoEscala').value = "";
   document.getElementById('resultado').textContent = "0";
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const valorMedidoInput = document.getElementById('valorMedido');
+    const fundoEscalaInput = document.getElementById('fundoEscala');
+    const resultadoElement = document.getElementById('resultado');
+    const resultadoPopupElement = document.getElementById('resultado-popup');
+    const popup = document.getElementById('popup');
+    const toggleModeButton = document.getElementById('toggle-mode');
+    let isDarkMode = false;
+
+    function calcular() {
+        const valorMedido = parseFloat(valorMedidoInput.value);
+        const fundoEscala = parseFloat(fundoEscalaInput.value);
+
+        if (isNaN(valorMedido) || isNaN(fundoEscala)) {
+            resultadoElement.textContent = "Insira valores válidos.";
+            return;
+        }
+
+        const resultado = (valorMedido / fundoEscala) * 100;
+        resultadoElement.textContent = resultado.toFixed(2) + "%";
+        resultadoPopupElement.textContent = resultado.toFixed(2) + "%";
+        popup.style.display = 'block';
+    }
+
+    function limpar() {
+        valorMedidoInput.value = '';
+        fundoEscalaInput.value = '';
+        resultadoElement.textContent = '0';
+    }
+
+    function closePopup() {
+        popup.style.display = 'none';
+    }
+
+    function toggleDarkMode() {
+        isDarkMode = !isDarkMode;
+        if (isDarkMode) {
+            document.body.classList.add('dark-mode');
+            toggleModeButton.textContent = '☀️';
+        } else {
+            document.body.classList.remove('dark-mode');
+            toggleModeButton.textContent = '🌙';
+        }
+    }
+
+    toggleModeButton.addEventListener('click', toggleDarkMode);
+
+    window.calcular = calcular;
+    window.limpar = limpar;
+    window.closePopup = closePopup;
+});
