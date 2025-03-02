@@ -2,35 +2,35 @@
 <html>
 <head>
     <title>Calculadora Ma</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <button id="toggle-mode">🌙</button>
-    <div>
-    <br>
-    <label for="valorMedido">Valor Medido:</label>
-    <br>    
-    <input type="number" id="valorMedido">
-    <br>
-    <label for="fundoEscala">Fundo de Escala:</label>
-    <br>
-    <input type="number" id="fundoEscala">
-    <br>
-    <button onclick="calcular()">Calcular</button>
-    <button onclick="limpar()">Limpar</button>
-    <br>
-    <label for="resultado">Resultado:</label>
-    <p id="resultado">0</p>
-    <script src="script.js"></script>
+    <div style="padding: 10px;"> 
+        <br>
+        <label for="valorMedido">Valor Medido:</label>
+        <br>    
+        <input type="number" id="valorMedido" style="width: 100%; box-sizing: border-box;">
+        <br>
+        <label for="fundoEscala">Fundo de Escala:</label>
+        <br>
+        <input type="number" id="fundoEscala" style="width: 100%; box-sizing: border-box;">
+        <br>
+        <button onclick="calcular()" style="width: 100%; margin-top: 10px;">Calcular</button>
+        <button onclick="limpar()" style="width: 100%; margin-top: 10px;">Limpar</button>
+        <br>
+        <label for="resultado">Resultado:</label>
+        <p id="resultado">0</p>
+        <script src="script.js"></script>
     </div>
     
     <div id="popup" class="popup">
-     <div class="popup-content">
-      <span class="close-button" onclick="closePopup()">&times;</span>
-      <p>Resultado:</p>
-      <p id="resultado-popup"></p>
-  </div>
-</div>
-
+        <div class="popup-content">
+            <span class="close-button" onclick="closePopup()">&times;</span>
+            <p>Resultado:</p>
+            <p id="resultado-popup"></p>
+        </div>
+    </div>
 </body>
 </html>
